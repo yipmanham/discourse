@@ -88,12 +88,6 @@ class Upload < ActiveRecord::Base
 
   def self.with_no_non_post_relations
     scope = self
-      .joins(<<~SQL)
-        LEFT JOIN site_settings ss
-        ON NULLIF(ss.value, '')::integer = uploads.id
-        AND ss.data_type = #{SiteSettings::TypeSupervisor.types[:upload].to_i}
-      SQL
-      .where("ss.value IS NULL")
       .joins("LEFT JOIN users u ON u.uploaded_avatar_id = uploads.id")
       .where("u.uploaded_avatar_id IS NULL")
       .joins("LEFT JOIN user_avatars ua ON ua.gravatar_upload_id = uploads.id OR ua.custom_upload_id = uploads.id")
