@@ -71,4 +71,21 @@ describe UploadReference do
         .to change { UploadReference.count }.by(-1)
     end
   end
+
+  context 'group uploads' do
+    fab!(:upload) { Fabricate(:upload) }
+
+    it 'creates upload references' do
+      group = nil
+      expect { group = Fabricate(:group, flair_upload_id: upload.id) }
+        .to change { UploadReference.count }.by(1)
+
+      upload_reference = UploadReference.last
+      expect(upload_reference.upload).to eq(upload)
+      expect(upload_reference.target).to eq(group)
+
+      expect { group.destroy! }
+        .to change { UploadReference.count }.by(-1)
+    end
+  end
 end
