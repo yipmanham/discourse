@@ -100,8 +100,6 @@ class Upload < ActiveRecord::Base
       .where("ce.upload_id IS NULL")
       .joins("LEFT JOIN theme_fields tf ON tf.upload_id = uploads.id")
       .where("tf.upload_id IS NULL")
-      .joins("LEFT JOIN user_exports ue ON ue.upload_id = uploads.id")
-      .where("ue.upload_id IS NULL")
       .joins(<<~SQL)
         LEFT JOIN theme_settings ts
         ON NULLIF(ts.value, '')::integer = uploads.id
