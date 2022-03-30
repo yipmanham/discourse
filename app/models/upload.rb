@@ -100,8 +100,6 @@ class Upload < ActiveRecord::Base
       .where("c.uploaded_logo_id IS NULL AND c.uploaded_background_id IS NULL")
       .joins("LEFT JOIN custom_emojis ce ON ce.upload_id = uploads.id")
       .where("ce.upload_id IS NULL")
-      .joins("LEFT JOIN theme_fields tf ON tf.upload_id = uploads.id")
-      .where("tf.upload_id IS NULL")
       .joins(<<~SQL)
         LEFT JOIN theme_settings ts
         ON NULLIF(ts.value, '')::integer = uploads.id

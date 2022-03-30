@@ -4,6 +4,14 @@ class ThemeField < ActiveRecord::Base
 
   belongs_to :upload
   has_one :javascript_cache, dependent: :destroy
+  has_one :upload_reference, as: :target, dependent: :destroy
+
+  after_save do
+    if saved_change_to_upload_id?
+      UploadReference.where(target: self).destroy_all
+      UploadReference.create!(upload_id: self.upload_id, target: self) if self.upload_id.present?
+    end
+  end
 
   scope :find_by_theme_ids, ->(theme_ids) {
     return none unless theme_ids.present?
@@ -35,6 +43,13 @@ class ThemeField < ActiveRecord::Base
       .reorder("X.theme_sort_column", "Y.locale_sort_column")
       .select("DISTINCT ON (X.theme_sort_column) *")
   }
+
+  after_save do
+    if self.type_id == ThemeField.types[:theme_upload_var] && saved_change_to_upload_id?
+      UploadReference.where(target: self).destroy_all
+      UploadReference.create!(upload_id: self.upload_id, target: self) if self.upload_id.present?
+    end
+  end
 
   def self.types
     @types ||= Enum.new(html: 0,
