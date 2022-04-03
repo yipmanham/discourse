@@ -1,4 +1,7 @@
-import { timeShortcuts } from "discourse/lib/time-shortcut";
+import {
+  timeShortcuts,
+  TIME_SHORTCUT_TYPES,
+} from "discourse/lib/time-shortcut";
 
 const TIMEFRAME_BASE = {
   enabled: () => true,
@@ -136,7 +139,10 @@ export function buildTimeframesOld(options = {}) {
 
 export default function buildTimeframes(options = {}, timezone) {
   //return buildTimeframesOld(options);
-  return defaultTimeframes(timezone);
+  console.log("ta da");
+  let timeframes = defaultTimeframes(timezone);
+  timeframes = processDynamicTimeframes(timeframes, options, timezone);
+  return timeframes.filter((t) => !t.hidden);
 }
 
 function defaultTimeframes(timezone) {
@@ -145,6 +151,7 @@ function defaultTimeframes(timezone) {
   return [
     shortcuts.laterToday(),
     shortcuts.tomorrow(),
+    shortcuts.thisWeekend(),
     shortcuts.monday(),
     shortcuts.twoWeeks(),
     shortcuts.nextMonth(),
@@ -153,6 +160,32 @@ function defaultTimeframes(timezone) {
     shortcuts.fourMonths(),
     shortcuts.sixMonths(),
   ];
+}
+
+function processDynamicTimeframes(timeframes, options, timezone) {
+  if (
+    !options.includeWeekend ||
+    options.day === 0 ||
+    options.day === 5 ||
+    options.day === 6
+  ) {
+    hideTimeframe(timeframes, TIME_SHORTCUT_TYPES.THIS_WEEKEND);
+  }
+
+  if (options.day === 0) {
+    hideTimeframe(timeframes, TIME_SHORTCUT_TYPES.START_OF_NEXT_BUSINESS_WEEK);
+  }
+
+  if (options.now.date() === moment(timezone).endOf("month").date()) {
+    hideTimeframe(timeframes, TIME_SHORTCUT_TYPES.NEXT_MONTH);
+  }
+
+  return timeframes;
+}
+
+function hideTimeframe(timeframes, timeframeId) {
+  const timeframe = timeframes.findBy("id", timeframeId);
+  timeframe.hidden = true;
 }
 
 // function transform(timeframe) {
