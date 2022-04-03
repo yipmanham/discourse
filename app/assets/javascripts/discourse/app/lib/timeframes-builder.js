@@ -136,16 +136,21 @@ export function buildTimeframesOld(options = {}) {
 
 export default function buildTimeframes(options = {}, timezone) {
   //return buildTimeframesOld(options);
+  return defaultTimeframes(timezone);
+}
+
+function defaultTimeframes(timezone) {
   const shortcuts = timeShortcuts(timezone);
 
   return [
     shortcuts.laterToday(),
     shortcuts.tomorrow(),
-    shortcuts.laterThisWeek(),
-    shortcuts.thisWeekend(),
     shortcuts.monday(),
     shortcuts.twoWeeks(),
     shortcuts.nextMonth(),
+    shortcuts.twoMonths(),
+    shortcuts.threeMonths(),
+    shortcuts.fourMonths(),
     shortcuts.sixMonths(),
   ];
 }

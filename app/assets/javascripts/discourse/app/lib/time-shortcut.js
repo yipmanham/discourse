@@ -6,6 +6,9 @@ import {
   nextBusinessWeekStart,
   nextMonth,
   now,
+  twoMonths,
+  threeMonths,
+  fourMonths,
   sixMonths,
   thisWeekend,
   tomorrow,
@@ -129,6 +132,33 @@ export function timeShortcuts(timezone) {
         id: "two_weeks",
         label: "time_shortcut.two_weeks",
         time: twoWeeks(timezone),
+        timeFormatKey: "dates.long_no_year",
+      };
+    },
+    twoMonths() {
+      return {
+        icon: "far-calendar-plus",
+        id: "two_months",
+        label: "time_shortcut.two_months",
+        time: twoMonths(timezone),
+        timeFormatKey: "dates.long_no_year",
+      };
+    },
+    threeMonths() {
+      return {
+        icon: "far-calendar-plus",
+        id: "three_months",
+        label: "time_shortcut.three_months",
+        time: threeMonths(timezone),
+        timeFormatKey: "dates.long_no_year",
+      };
+    },
+    fourMonths() {
+      return {
+        icon: "far-calendar-plus",
+        id: "four_months",
+        label: "time_shortcut.four_months",
+        time: fourMonths(timezone),
         timeFormatKey: "dates.long_no_year",
       };
     },

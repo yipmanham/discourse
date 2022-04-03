@@ -47,6 +47,18 @@ export function twoWeeks(timezone) {
   return startOfDay(now(timezone).add(2, "weeks").day(MOMENT_MONDAY));
 }
 
+export function twoMonths(timezone) {
+  return startOfDay(now(timezone).add(6, "months").startOf("month"));
+}
+
+export function threeMonths(timezone) {
+  return startOfDay(now(timezone).add(6, "months").startOf("month"));
+}
+
+export function fourMonths(timezone) {
+  return startOfDay(now(timezone).add(6, "months").startOf("month"));
+}
+
 export function sixMonths(timezone) {
   return startOfDay(now(timezone).add(6, "months").startOf("month"));
 }
