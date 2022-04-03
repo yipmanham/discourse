@@ -71,6 +71,15 @@ class SessionController < ApplicationController
         return
       end
 
+      if sso.require_2fa
+        result = run_second_factor!(SecondFactor::Actions::DiscourseConnect2faProvider)
+        # if !current_user
+        #   
+        # end
+        # if current_user.has_2fa_method?
+        # end
+      end
+
       if current_user
         sso.name = current_user.name
         sso.username = current_user.username

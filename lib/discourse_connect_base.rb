@@ -16,18 +16,19 @@ class DiscourseConnectBase
     groups
     locale
     locale_force_update
+    location
     logout
     name
     nonce
     profile_background_url
     remove_groups
+    require_2fa
     require_activation
     return_sso_url
     suppress_welcome_message
     title
     username
     website
-    location
   }
 
   FIXNUMS = []
@@ -38,6 +39,7 @@ class DiscourseConnectBase
     locale_force_update
     logout
     moderator
+    require_2fa
     require_activation
     suppress_welcome_message
   }
