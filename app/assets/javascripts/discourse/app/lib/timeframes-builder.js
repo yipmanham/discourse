@@ -1,3 +1,5 @@
+import { timeShortcuts } from "discourse/lib/time-shortcut";
+
 const TIMEFRAME_BASE = {
   enabled: () => true,
   when: () => null,
@@ -128,6 +130,37 @@ export function timeframeDetails(id) {
   return _timeframeById[id];
 }
 
-export default function buildTimeframes(options = {}) {
+export function buildTimeframesOld(options = {}) {
   return TIMEFRAMES.filter((tf) => tf.enabled(options));
 }
+
+export default function buildTimeframes(options = {}, timezone) {
+  //return buildTimeframesOld(options);
+  const shortcuts = timeShortcuts(timezone);
+
+  return [
+    shortcuts.laterToday(),
+    shortcuts.tomorrow(),
+    shortcuts.laterThisWeek(),
+    shortcuts.thisWeekend(),
+    shortcuts.monday(),
+    shortcuts.twoWeeks(),
+    shortcuts.nextMonth(),
+    shortcuts.sixMonths(),
+  ];
+}
+
+// function transform(timeframe) {
+//   return {
+//     enabled: () => true,
+//     when: () => null,
+//
+//     displayWhen: true,
+//
+//     id: "now",
+//     format: "h:mm a",
+//     enabled: (opts) => opts.canScheduleNow,
+//     when: (time) => time.add(1, "minute"),
+//     icon: "magic",
+//   };
+// }
