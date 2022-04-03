@@ -139,7 +139,6 @@ export function buildTimeframesOld(options = {}) {
 
 export default function buildTimeframes(options = {}, timezone) {
   //return buildTimeframesOld(options);
-  console.log("ta da");
   let timeframes = defaultTimeframes(timezone);
   timeframes = processDynamicTimeframes(timeframes, options, timezone);
   return timeframes.filter((t) => !t.hidden);
@@ -151,6 +150,7 @@ function defaultTimeframes(timezone) {
   return [
     shortcuts.laterToday(),
     shortcuts.tomorrow(),
+    shortcuts.laterThisWeek(),
     shortcuts.thisWeekend(),
     shortcuts.monday(),
     shortcuts.twoWeeks(),
@@ -180,6 +180,14 @@ function processDynamicTimeframes(timeframes, options, timezone) {
     hideTimeframe(timeframes, TIME_SHORTCUT_TYPES.NEXT_MONTH);
   }
 
+  if (!options.canScheduleToday) {
+    hideTimeframe(timeframes, TIME_SHORTCUT_TYPES.LATER_TODAY);
+  }
+
+  if (options.canScheduleToday || options.day === 0 || options.day >= 4) {
+    hideTimeframe(timeframes, TIME_SHORTCUT_TYPES.LATER_THIS_WEEK);
+  }
+
   return timeframes;
 }
 
@@ -187,18 +195,3 @@ function hideTimeframe(timeframes, timeframeId) {
   const timeframe = timeframes.findBy("id", timeframeId);
   timeframe.hidden = true;
 }
-
-// function transform(timeframe) {
-//   return {
-//     enabled: () => true,
-//     when: () => null,
-//
-//     displayWhen: true,
-//
-//     id: "now",
-//     format: "h:mm a",
-//     enabled: (opts) => opts.canScheduleNow,
-//     when: (time) => time.add(1, "minute"),
-//     icon: "magic",
-//   };
-// }
